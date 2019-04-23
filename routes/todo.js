@@ -29,7 +29,7 @@ Router.put('/:id', async (req, res) => {
 
     result.title = title || result.title;
     result.description = description || result.description;
-    result.completed = completed || result.completed;
+    result.completed = completed;
     await result.save();
     // eslint-disable-next-line no-underscore-dangle
     return res.status(200).json(result._doc);
