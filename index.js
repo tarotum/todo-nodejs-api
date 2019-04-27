@@ -5,7 +5,7 @@ const ENV = require('dotenv');
 const TodoRoutes = require('./routes/todo');
 
 ENV.config();
-
+const { PORT, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 const app = express();
 
 app.use(cors());
@@ -17,15 +17,15 @@ app.use('/', TodoRoutes);
 
 // Conntent DB
 mongoose.connect(
-  `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
   { useNewUrlParser: true },
   err => {
     if (err) {
       global.console.log(`Some problem with the connection ${err}`);
     } else {
       global.console.log('The Mongoose connection is ready');
-      app.listen(process.env.PORT, () =>
-        global.console.log(`Server is runing on http://localhost:${process.env.PORT}`)
+      app.listen(PORT || 5000, () =>
+        global.console.log(`Server is runing on http://localhost:${PORT || 5000}`)
       );
     }
   }
