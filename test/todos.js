@@ -141,7 +141,7 @@ describe("Todos", () => {
           .request(server)
           .get(`/${todo.id}`)
           .send(todo)
-          .end((err, res) => {
+          .end((errors, res) => {
             res.should.have.status(200);
             res.body.should.be.a("object");
             res.body.should.have.property("_id").eql(todo.id);
@@ -172,7 +172,7 @@ describe("Todos", () => {
           .request(server)
           .put(`/${todo.id}`)
           .send(updatedTodo)
-          .end((err, res) => {
+          .end((errors, res) => {
             res.should.have.status(200);
             res.body.should.be.a("object");
             res.body.should.have
@@ -203,7 +203,7 @@ describe("Todos", () => {
         chai
           .request(server)
           .delete(`/${todo.id}`)
-          .end((err, res) => {
+          .end((errors, res) => {
             res.should.have.status(200);
             res.body.should.be.a("object");
             res.body.should.have
