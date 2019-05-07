@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=testing mocha --timeout 5000",
     "lint:js": "eslint ./"
   },
   "engines": {
@@ -29,11 +30,14 @@
     "mongoose": "^5.5.2"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-node": "^8.0.1",
+    "mocha": "^6.1.4",
     "nodemon": "^1.18.11"
   }
 }
