@@ -1,11 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const ENV = require('dotenv');
-const TodoRoutes = require('./routes/todo');
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const TodoRoutes = require("./routes/todo");
 
-ENV.config();
-const { PORT, DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
+const config = require("./config");
+
 const app = express();
 
 app.use(cors());
@@ -13,21 +12,34 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/', TodoRoutes);
+app.use("/", TodoRoutes);
 
 // Conntent DB
 mongoose.connect(
-  `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+  `mongodb://${config.db.username}:${config.db.password}@${config.db.host}:${
+    config.db.port
+  }/${config.db.name}`,
   { useNewUrlParser: true },
   err => {
     if (err) {
-      global.console.log(`Some problem with the connection ${err}`);
+      if (process.env.NODE_ENV !== "testing") {
+        global.console.log(`Some problem with the connection ${err}`);
+      }
     } else {
-      global.console.log('The Mongoose connection is ready');
-      app.listen(PORT || 5000, () =>
-        global.console.log(`Server is runing on http://localhost:${PORT || 5000}`)
+      if (process.env.NODE_ENV !== "testing") {
+        global.console.log("The Mongoose connection is ready");
+      }
+      app.listen(
+        config.app.port || 5000,
+        () =>
+          process.env.NODE_ENV !== "testing" &&
+          global.console.log(
+            `Server is runing on http://localhost:${config.app.port || 5000}`
+          )
       );
     }
   }
 );
-mongoose.set('useCreateIndex', true);
+mongoose.set("useCreateIndex", true);
+
+module.exports = app; // for testing
