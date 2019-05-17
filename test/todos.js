@@ -39,9 +39,7 @@ describe("Todos", () => {
      */
 
     it("It should not POST a todo without title field", done => {
-      const todo = {
-        description: "Test todo description"
-      };
+      const todo = {};
 
       chai
         .request(server)
@@ -58,38 +56,12 @@ describe("Todos", () => {
     });
 
     /**
-     *  Validate description field
-     */
-
-    it("It should not POST a todo without description field", done => {
-      const todo = {
-        title: "Test todo title"
-      };
-
-      chai
-        .request(server)
-        .post("/")
-        .send(todo)
-        .end((err, res) => {
-          res.should.have.status(206);
-          res.body.should.be.a("object");
-          res.body.should.have.property("errors");
-          res.body.errors.should.have.property("description");
-          res.body.errors.description.should.have
-            .property("kind")
-            .eql("required");
-          done();
-        });
-    });
-
-    /**
      *  Validate completed field
      */
 
     it("It should POST a todo without completed field (because completed has default = false)", done => {
       const todo = {
-        title: "Test todo title",
-        description: "Test todo description"
+        title: "Test todo title"
       };
 
       chai
@@ -110,8 +82,7 @@ describe("Todos", () => {
 
     it("It should POST a todo", done => {
       const todo = {
-        title: "Test todo title",
-        description: "Test todo description"
+        title: "Test todo title"
       };
 
       chai
@@ -122,7 +93,6 @@ describe("Todos", () => {
           res.should.have.status(201);
           res.body.should.be.a("object");
           res.body.should.have.property("title").eql(todo.title);
-          res.body.should.have.property("description").eql(todo.description);
           res.body.should.have.property("completed").eql(false);
           done();
         });
@@ -132,8 +102,7 @@ describe("Todos", () => {
   describe("/GET:ID todo", () => {
     it("It should GET a todo by the given id", done => {
       const newTodo = new Todo({
-        title: "Test todo title",
-        description: "Test todo description"
+        title: "Test todo title"
       });
 
       newTodo.save((err, todo) => {
@@ -146,7 +115,6 @@ describe("Todos", () => {
             res.body.should.be.a("object");
             res.body.should.have.property("_id").eql(todo.id);
             res.body.should.have.property("title").eql(todo.title);
-            res.body.should.have.property("description").eql(todo.description);
             res.body.should.have.property("completed").eql(false);
             done();
           });
@@ -157,13 +125,11 @@ describe("Todos", () => {
   describe("/PUT/:ID todo", () => {
     it("It should UPDATE todo given by id", done => {
       const newTodo = new Todo({
-        title: "Test todo title",
-        description: "Test todo description"
+        title: "Test todo title"
       });
 
       const updatedTodo = {
         title: "Test todo title update",
-        description: "Test todo description update",
         completed: true
       };
 
@@ -181,9 +147,6 @@ describe("Todos", () => {
             res.body.should.have.property("_id").eql(todo.id);
             res.body.should.have.property("title").eql(updatedTodo.title);
             res.body.should.have
-              .property("description")
-              .eql(updatedTodo.description);
-            res.body.should.have
               .property("completed")
               .eql(updatedTodo.completed);
             done();
@@ -195,8 +158,7 @@ describe("Todos", () => {
   describe("/DELETE/:ID todo", () => {
     it("It should DELETE todo given by id", done => {
       const newTodo = new Todo({
-        title: "Test todo title",
-        description: "Test todo description"
+        title: "Test todo title"
       });
 
       newTodo.save((err, todo) => {

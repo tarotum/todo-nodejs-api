@@ -8,10 +8,9 @@ const Router = express.Router();
  * POST / route for saving new Todo
  */
 Router.post("/", async (req, res) => {
-  const { title, description } = req.body;
+  const { title } = req.body;
   const todo = new Todo({
-    title,
-    description
+    title
   });
 
   try {
@@ -39,6 +38,7 @@ Router.put("/:id", async (req, res) => {
       .status(200)
       .json({ message: "Todo successful update", ...result._doc });
   } catch (error) {
+    if (error.name === "ValidationError") return res.status(206).json(error);
     return res.status(500).json({ message: "Updating todo error", ...error });
   }
 });
